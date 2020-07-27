@@ -93,13 +93,38 @@ public class ChallengeController {
      */
     @RequestMapping(value = "/api/create/", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody Map create(@RequestBody Map<String, String> data) {
-        //List<JSONObject> entities = new ArrayList<JSONObject>();
-        HashMap entity = new HashMap();
-        entity.put("status" , "500");
-        entity.put("message", "Internal Server Error");
-        entity.put("alias"  , data.get("url"));
-        //entities.add(entity);
+        Map entity = new HashMap();
         
+        if(data!=null && data.get("url")!=null){
+            try {
+                entity = urlShortenerService.createAlias(data.get("url"));
+
+            } catch (HttpClientErrorException ex) {
+                //4xx url syntaxis error
+                Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
+                entity.put("status" , ex.getStatusCode());
+                entity.put("message", ex.getMessage());
+                entity.put("alias"  , "");
+
+            } catch (HttpServerErrorException ex) {
+                //5xx url syntaxis error
+                Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
+                entity.put("status" , ex.getStatusCode());
+                entity.put("message", ex.getMessage());
+                entity.put("alias"  , "");
+                
+            } catch(Exception ex){
+                Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
+                entity.put("status" , "500");
+                entity.put("message", "Internal Server Error");
+                entity.put("alias"  , "");
+            }
+        }else{
+            entity.put("status" , "400");
+            entity.put("message", "Bad Request - url missing");
+            entity.put("alias"  , "");
+        }
+       
         return entity;    
     }
     

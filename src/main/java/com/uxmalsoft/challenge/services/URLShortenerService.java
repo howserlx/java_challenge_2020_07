@@ -8,10 +8,12 @@ package com.uxmalsoft.challenge.services;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.uxmalsoft.challenge.utils.RandomString;
 /**
  *
  * @author JFGH
@@ -50,6 +52,53 @@ public class URLShortenerService {
            
         return uri;
     }//askForAlias
+    
+    
+    
+    
+    /**
+     * Crea un alias
+     * @param url
+     * @return 
+     */
+    public Map createAlias(String url) throws HttpClientErrorException,HttpServerErrorException{
+        HashMap entity = new HashMap();
+        
+        if (url!= null && !url.isEmpty()){
+            String alias = generateAlias(url);
+            
+            //Pendiente - validaciones de existencia
+            aliasMap.put(alias, url);
+            entity.put("status" , HttpStatus.OK);
+            entity.put("message", "Alias created");
+            entity.put("alias"  , alias);
+            
+        }else{
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Empty url");
+        }   
+           
+        return entity;
+    }//createAlias
+    
+    
+    /**
+     * Crea un alias
+     * @param url
+     * @return 
+     */
+    private String generateAlias(String url){
+        String alias = null;
+        if(url.toLowerCase().contains("google")){
+            alias = RandomString.getAlphaString(5);
+        }else 
+            if(url.toLowerCase().contains("yahoo")){
+                alias = RandomString.getAlphaNumericString(7);
+            }else{
+                alias = url.toLowerCase().replaceAll("/[^A-Za-z ]/", "").replaceAll("[a|e|i|o|u]","");
+            }
+        
+        return alias;
+    }//generateAlias
     
   
 }//class
