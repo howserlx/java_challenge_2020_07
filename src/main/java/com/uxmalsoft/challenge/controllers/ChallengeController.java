@@ -102,14 +102,14 @@ public class ChallengeController {
             } catch (HttpClientErrorException ex) {
                 //4xx url syntaxis error
                 Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
-                entity.put("status" , ex.getStatusCode());
+                entity.put("status" , ex.getStatusCode().value());
                 entity.put("message", ex.getMessage());
                 entity.put("alias"  , "");
 
             } catch (HttpServerErrorException ex) {
                 //5xx url syntaxis error
                 Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
-                entity.put("status" , ex.getStatusCode());
+                entity.put("status" , ex.getStatusCode().value());
                 entity.put("message", ex.getMessage());
                 entity.put("alias"  , "");
                 
