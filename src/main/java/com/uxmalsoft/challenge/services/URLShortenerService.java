@@ -94,7 +94,7 @@ public class URLShortenerService {
             if(url.toLowerCase().contains("yahoo")){
                 alias = RandomString.getAlphaNumericString(7);
             }else{
-                alias = url.toLowerCase().replaceAll("/[^A-Za-z ]/", "").replaceAll("[a|e|i|o|u]","");
+                alias = URI.create(url).getHost().toLowerCase().replaceAll("[^A-Za-z]", "").replaceAll("[a|e|i|o|u]","");
             }
         
         return alias;
