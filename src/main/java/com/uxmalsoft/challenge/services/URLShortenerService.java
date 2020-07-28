@@ -74,7 +74,9 @@ public class URLShortenerService {
             //Ya fue insertada
             String alreadyInsertedURL = aliasMap.get(alias);
             if(alreadyInsertedURL!= null && !alreadyInsertedURL.isEmpty()){
-            
+                entity.put("status" , HttpStatus.OK);
+                entity.put("message", "Alias founded");
+                entity.put("alias"  , alias);
             }
             
             try {
